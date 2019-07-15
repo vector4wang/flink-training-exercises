@@ -16,6 +16,7 @@ tmp
 *.jar
 *.log
 .DS_Store
+*.gz
 _site
 docs/api
 build-target
