@@ -121,7 +121,7 @@
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-table-uber_${scala.binary.version}</artifactId>
 			<version>${flink.version}</version>
-			<!--<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -312,6 +312,34 @@
 				</executions>
 			</plugin>
 
+            <!-- 打jar包插件(会包含所有依赖) -->
+            <!--&lt;!&ndash; 也可以额参考这个https://github.com/apache/flink/blob/master/flink-examples/flink-examples-streaming/pom.xml &ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<version>2.6</version>-->
+                <!--<configuration>-->
+                    <!--<descriptorRefs>-->
+                        <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                    <!--</descriptorRefs>-->
+                    <!--<archive>-->
+                        <!--<manifest>-->
+                            <!--&lt;!&ndash; 可以设置jar包的入口类(可选) &ndash;&gt;-->
+                            <!--<mainClass>com.flink.example.streaming.SocketWindowWordCount</mainClass>-->
+                        <!--</manifest>-->
+                    <!--</archive>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>make-assembly</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>single</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -331,14 +359,15 @@
 
 							<archive>
 								<manifestEntries>
-									<main-class>com.dataartisans.flinktraining.dataset_preparation.MBoxParser</main-class>
+									<!--<main-class>com.dataartisans.flinktraining.dataset_preparation.MBoxParser</main-class>-->
+									<main-class>com.dataartisans.flinktraining.base.join.ConnectedStreamExampler</main-class>
 								</manifestEntries>
 							</archive>
 
-							<includes>
-								<include>**/MBoxParser.class</include>
-								<include>**/MBoxParser$*.class</include>
-							</includes>
+							<!--<includes>-->
+								<!--<include>**/MBoxParser.class</include>-->
+								<!--<include>**/MBoxParser$*.class</include>-->
+							<!--</includes>-->
 						</configuration>
 					</execution>
 

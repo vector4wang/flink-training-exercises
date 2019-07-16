@@ -19,11 +19,15 @@ package com.dataartisans.flinktraining.exercises.datastream_java.windows;
 import com.dataartisans.flinktraining.exercises.datastream_java.datatypes.TaxiFare;
 import com.dataartisans.flinktraining.exercises.datastream_java.sources.TaxiFareSource;
 import com.dataartisans.flinktraining.exercises.datastream_java.utils.ExerciseBase;
-import com.dataartisans.flinktraining.exercises.datastream_java.utils.MissingSolutionException;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.util.Collector;
 
 /**
  * The "Hourly Tips" exercise of the Flink training
@@ -34,6 +38,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  *
  * Parameters:
  * -input path-to-input-file
+ *
+ * 在该小时内获得最多小费的司机的驱动程序ID，以及他们的小费的实际总数
  *
  */
 public class HourlyTipsExercise extends ExerciseBase {
@@ -55,12 +61,27 @@ public class HourlyTipsExercise extends ExerciseBase {
 		// start the data generator
 		DataStream<TaxiFare> fares = env.addSource(fareSourceOrTest(new TaxiFareSource(input, maxEventDelay, servingSpeedFactor)));
 
-		throw new MissingSolutionException();
+        DataStream<Tuple3<Long, Long, Float>> hourlyTips = fares.keyBy(fare -> fare.driverId).timeWindow(Time.hours(1)).process(new AddTips());
 
-//		printOrTest(hourlyMax);
+        DataStream<Tuple3<Long, Long, Float>> hourlyMax = hourlyTips.timeWindowAll(Time.hours(1)).maxBy(2);
+
+
+
+
+		printOrTest(hourlyTips);
 
 		// execute the transformation pipeline
-//		env.execute("Hourly Tips (java)");
+		env.execute("Hourly Tips (java)");
 	}
 
+    private static class AddTips extends ProcessWindowFunction<TaxiFare, Tuple3<Long,Long,Float>,Long, TimeWindow> {
+        @Override
+        public void process(Long key, Context context, Iterable<TaxiFare> fares, Collector<Tuple3<Long, Long, Float>> out) throws Exception {
+            Float sumOfTips = 0F;
+            for (TaxiFare fare : fares) {
+                sumOfTips += fare.tip;
+            }
+            out.collect(new Tuple3<>(context.window().getEnd(),key,sumOfTips));
+        }
+    }
 }

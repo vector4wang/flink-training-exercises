@@ -28,8 +28,8 @@ public class ExerciseBase {
 	public static SinkFunction out = null;
 	public static int parallelism = 4;
 
-	public final static String pathToRideData = "/Users/wangxc/Code/Github/flink-training-exercises/trainingData/nycTaxiRides.gz";
-	public final static String pathToFareData = "/Users/wangxc/Code/Github/flink-training-exercises/trainingData/nycTaxiFares.gz";
+	public final static String pathToRideData = "D:\\data\\flink\\trainingData\\nycTaxiRides.gz";
+	public final static String pathToFareData = "D:\\data\\flink\\trainingData\\nycTaxiFares.gz";
 
 	public static SourceFunction<TaxiRide> rideSourceOrTest(SourceFunction<TaxiRide> source) {
 		if (rides == null) {
