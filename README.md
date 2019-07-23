@@ -42,3 +42,5 @@ totalFare      : Float     // total fare collected
 https://www.cnblogs.com/bjwu/p/9973521.html
 
 https://training.ververica.com/
+
+
