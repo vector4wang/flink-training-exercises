@@ -8,6 +8,11 @@ import org.apache.flink.api.common.functions.AggregateFunction;
  */
 public class CountAgg implements AggregateFunction<UserBehavior, Long, Long> {
 
+    int pid;
+
+    public CountAgg(int pid) {
+        this.pid = pid;
+    }
 
     @Override
     public Long createAccumulator() {
@@ -16,7 +21,11 @@ public class CountAgg implements AggregateFunction<UserBehavior, Long, Long> {
 
     @Override
     public Long add(UserBehavior userBehavior, Long acc) {
-        return acc + 1;
+        if (userBehavior.itemId == pid) {
+            return acc + 1;
+        }
+        return 0L;
+
     }
 
     @Override

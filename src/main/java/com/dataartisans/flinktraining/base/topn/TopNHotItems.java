@@ -47,7 +47,6 @@ public class TopNHotItems extends KeyedProcessFunction<Tuple, ItemViewCount, Str
 
     @Override
     public void onTimer(long timestamp, OnTimerContext ctx, Collector<String> out) throws Exception {
-
         List<ItemViewCount> allItems = new ArrayList<>();
         for (ItemViewCount itemViewCount : itemState.get()) {
             allItems.add(itemViewCount);
@@ -66,6 +65,11 @@ public class TopNHotItems extends KeyedProcessFunction<Tuple, ItemViewCount, Str
         StringBuilder result = new StringBuilder();
         result.append("====================================\n");
         result.append("时间: ").append(new Timestamp(timestamp - 1)).append("\n");
+
+        result.append("窗口范围: ").append(new Timestamp(allItems.get(0).windowStart))
+                .append("-----")
+                .append(new Timestamp(allItems.get(0).windowEnd))
+                .append("\n");
         for (int i = 0; i < topSize; i++) {
             ItemViewCount currentItem = allItems.get(i);
             // No1:  商品ID=12224  浏览量=2413

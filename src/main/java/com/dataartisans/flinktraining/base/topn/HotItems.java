@@ -21,6 +21,9 @@ import java.net.URL;
  * 代码来自：http://wuchong.me/blog/2018/11/07/use-flink-calculate-hot-items/
  */
 public class HotItems {
+
+    private final static int pid = 4528499;
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         // 为了打印到控制台的结果不乱序，我们配置全局的并发为1，这里改变并发对结果正确性没有影响
@@ -60,12 +63,12 @@ public class HotItems {
             }
         });
 
-        // 统计点击量
+        // 统计4528499商品的点击量
         DataStream<UserBehavior> pvData = timedData.filter(new FilterFunction<UserBehavior>() {
             @Override
             public boolean filter(UserBehavior userBehavior) throws Exception {
-
-                return userBehavior.behavior.equals("pv");
+                //  && userBehavior.itemId == 4528499
+                return userBehavior.behavior.equals("pv") && userBehavior.itemId == pid;
             }
         });
 
@@ -76,9 +79,9 @@ public class HotItems {
          */
         DataStream<ItemViewCount> windowData = pvData.keyBy("itemId")
                 .timeWindow(Time.minutes(60), Time.minutes( 10))
-                .aggregate(new CountAgg(), new WindowResultFunction());
+                .aggregate(new CountAgg(pid), new WindowResultFunction());
 
-        DataStream<String> topItems = windowData.keyBy("windowEnd").process(new TopNHotItems(3));
+        DataStream<String> topItems = windowData.keyBy("windowEnd").process(new TopNHotItems(1));
 
         topItems.print();
 
