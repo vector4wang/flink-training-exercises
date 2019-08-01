@@ -77,37 +77,36 @@ public class RidesAndFaresExercise extends ExerciseBase {
 
     public static class EnrichmentFunction extends RichCoFlatMapFunction<TaxiRide, TaxiFare, Tuple2<TaxiRide, TaxiFare>> {
 
-        private ValueState<TaxiRide> rideState;
+    	private ValueState<TaxiRide> rideValueState;
 
-        private ValueState<TaxiFare> fareState;
+		private ValueState<TaxiFare> fareValueState;
 
-        @Override
-        public void open(Configuration config) throws Exception {
-            rideState = getRuntimeContext().getState(new ValueStateDescriptor<>("save ride", TaxiRide.class));
-            fareState = getRuntimeContext().getState(new ValueStateDescriptor<>("save fare", TaxiFare.class));
-        }
+		@Override
+		public void open(Configuration parameters) throws Exception {
+			rideValueState = getRuntimeContext().getState(new ValueStateDescriptor<>("saved ride", TaxiRide.class));
+			fareValueState = getRuntimeContext().getState(new ValueStateDescriptor<>("saved fare", TaxiFare.class));
+		}
 
-        @Override
-        public void flatMap1(TaxiRide ride, Collector<Tuple2<TaxiRide, TaxiFare>> out) throws Exception {
-            TaxiFare value = fareState.value();
-            if (value != null) {
-                fareState.clear();
-                out.collect(new Tuple2<>(ride,value));
-            }else{
-                rideState.update(ride);
-            }
+		@Override
+		public void flatMap1(TaxiRide value, Collector<Tuple2<TaxiRide, TaxiFare>> out) throws Exception {
+			TaxiFare taxiFare = fareValueState.value();
+			if (taxiFare != null) {
+				fareValueState.clear();
+				out.collect(new Tuple2(value, taxiFare));
+			}else{
+				rideValueState.update(value);
+			}
+		}
 
-        }
-
-        @Override
-        public void flatMap2(TaxiFare fare, Collector<Tuple2<TaxiRide, TaxiFare>> out) throws Exception {
-            TaxiRide value = rideState.value();
-            if (value != null) {
-                rideState.clear();
-                out.collect(new Tuple2<>(value, fare));
-            } else {
-                fareState.update(fare);
-            }
-        }
-    }
+		@Override
+		public void flatMap2(TaxiFare value, Collector<Tuple2<TaxiRide, TaxiFare>> out) throws Exception {
+			TaxiRide taxiRide = rideValueState.value();
+			if (taxiRide != null) {
+				rideValueState.clear();
+				out.collect(new Tuple2(value,taxiRide));
+			}else{
+				fareValueState.update(value);
+			}
+		}
+	}
 }

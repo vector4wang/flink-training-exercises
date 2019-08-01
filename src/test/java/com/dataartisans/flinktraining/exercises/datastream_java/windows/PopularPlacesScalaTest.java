@@ -16,7 +16,7 @@
 
 package com.dataartisans.flinktraining.exercises.datastream_java.windows;
 
-import com.dataartisans.flinktraining.exercises.datastream_scala.windows.PopularPlacesExercise;
+import com.dataartisans.flinktraining.solutions.datastream_java.windows.PopularPlacesSolution;
 import org.apache.flink.api.java.tuple.Tuple5;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class PopularPlacesScalaTest extends PopularPlacesTest {
 	static Testable scalaExercise = () -> PopularPlacesExercise.main(new String[]{"-threshold", "2"});
 
 	protected List<Tuple5<Float, Float, Long, Boolean, Integer>> results(TestRideSource source) throws Exception {
-		Testable scalaSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.windows.PopularPlacesSolution.main(new String[]{"-threshold", "2"});
+		Testable scalaSolution = () -> PopularPlacesSolution.main(new String[]{"-threshold", "2"});
 		List<?> tuples = runApp(source, new TestSink<>(), scalaExercise, scalaSolution);
 		return javaTuples((ArrayList<scala.Tuple5<Float, Float, Long, Boolean, Integer>>) tuples);
 	}

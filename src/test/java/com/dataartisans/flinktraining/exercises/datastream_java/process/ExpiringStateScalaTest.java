@@ -16,7 +16,8 @@
 
 package com.dataartisans.flinktraining.exercises.datastream_java.process;
 
-import com.dataartisans.flinktraining.exercises.datastream_scala.process.ExpiringStateExercise;
+import com.dataartisans.flinktraining.solutions.datastream_java.process.ExpiringStateSolution;
+
 import java.util.List;
 
 public class ExpiringStateScalaTest extends ExpiringStateTest {
@@ -24,7 +25,7 @@ public class ExpiringStateScalaTest extends ExpiringStateTest {
 	static Testable scalaExercise = () -> ExpiringStateExercise.main(new String[]{});
 
 	protected List<?> results(TestRideSource rides, TestFareSource fares) throws Exception {
-		Testable scalaSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.process.ExpiringStateSolution.main(new String[]{});
+		Testable scalaSolution = () -> ExpiringStateSolution.main(new String[]{});
 		return runApp(rides, fares, new TestSink<>(), scalaExercise, scalaSolution);
 	}
 

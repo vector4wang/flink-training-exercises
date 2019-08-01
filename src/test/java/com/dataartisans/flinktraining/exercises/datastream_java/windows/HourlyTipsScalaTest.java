@@ -16,7 +16,7 @@
 
 package com.dataartisans.flinktraining.exercises.datastream_java.windows;
 
-import com.dataartisans.flinktraining.exercises.datastream_scala.windows.HourlyTipsExercise;
+import com.dataartisans.flinktraining.solutions.datastream_java.windows.HourlyTipsSolution;
 import org.apache.flink.api.java.tuple.Tuple3;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class HourlyTipsScalaTest extends HourlyTipsTest {
 	static Testable scalaExercise = () -> HourlyTipsExercise.main(new String[]{});
 
 	protected List<Tuple3<Long, Long, Float>> results(TestFareSource source) throws Exception {
-		Testable scalaSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.windows.HourlyTipsSolution.main(new String[]{});
+		Testable scalaSolution = () -> HourlyTipsSolution.main(new String[]{});
 		List<?> tuples = runApp(source, new TestSink<>(), scalaExercise, scalaSolution);
 		return javaTuples((ArrayList<scala.Tuple3<Long, Long, Float>>) tuples);
 	}

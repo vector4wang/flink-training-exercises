@@ -17,27 +17,28 @@
 package com.dataartisans.flinktraining.exercises.datastream_java.process;
 
 import com.dataartisans.flinktraining.exercises.datastream_java.datatypes.TaxiRide;
-import com.dataartisans.flinktraining.exercises.datastream_java.testing.TaxiRideTestBase;
+import com.dataartisans.flinktraining.solutions.datastream_java.cep.LongRidesSolution;
+import com.dataartisans.flinktraining.solutions.datastream_java.process.CheckpointedLongRidesSolution;
 
 import java.util.List;
 
 public class LongRidesScalaTest extends LongRidesTest {
 
-	static Testable scalaExercise = () -> com.dataartisans.flinktraining.exercises.datastream_scala.process.LongRidesExercise.main(new String[]{});
-	static Testable scalaCEPExercise = () -> com.dataartisans.flinktraining.exercises.datastream_scala.cep.LongRidesExercise.main(new String[]{});
+	static Testable scalaExercise = () -> LongRidesExercise.main(new String[]{});
+	static Testable scalaCEPExercise = () -> LongRidesExercise.main(new String[]{});
 
 	protected List<TaxiRide> results(TestRideSource source) throws Exception {
-		Testable scalaSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.process.LongRidesSolution.main(new String[]{});
+		Testable scalaSolution = () -> LongRidesSolution.main(new String[]{});
 		return runApp(source, new TestSink<>(), scalaExercise, scalaSolution);
 	}
 
 	protected List<TaxiRide> cepResults(TestRideSource source) throws Exception {
-		Testable scalaCEPSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.cep.LongRidesSolution.main(new String[]{});
+		Testable scalaCEPSolution = () -> LongRidesSolution.main(new String[]{});
 		return runApp(source, new TestSink<>(), scalaCEPExercise, scalaCEPSolution);
 	}
 
 	protected List<TaxiRide> checkpointedResults(TestRideSource source) throws Exception {
-		Testable scalaCheckpointedSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.process.CheckpointedLongRidesSolution.main(new String[]{});
+		Testable scalaCheckpointedSolution = () -> CheckpointedLongRidesSolution.main(new String[]{});
 		return runApp(source, new TestSink<>(), scalaCheckpointedSolution);
 	}
 

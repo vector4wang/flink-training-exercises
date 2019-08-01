@@ -16,7 +16,8 @@
 
 package com.dataartisans.flinktraining.exercises.datastream_java.basics;
 
-import com.dataartisans.flinktraining.exercises.datastream_scala.basics.RideCleansingExercise;
+import com.dataartisans.flinktraining.solutions.datastream_java.basics.RideCleansingSolution;
+
 import java.util.List;
 
 public class RideCleansingScalaTest extends RideCleansingTest {
@@ -24,7 +25,7 @@ public class RideCleansingScalaTest extends RideCleansingTest {
 	static Testable scalaExercise = () -> RideCleansingExercise.main(new String[]{});
 
 	protected List<?> results(TestRideSource source) throws Exception {
-		Testable scalaSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.basics.RideCleansingSolution.main(new String[]{});
+		Testable scalaSolution = () -> RideCleansingSolution.main(new String[]{});
 		return runApp(source, new TestSink<>(), scalaExercise, scalaSolution);
 	}
 

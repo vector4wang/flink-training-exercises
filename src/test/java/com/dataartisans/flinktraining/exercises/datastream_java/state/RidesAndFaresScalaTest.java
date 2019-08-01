@@ -18,7 +18,7 @@ package com.dataartisans.flinktraining.exercises.datastream_java.state;
 
 import com.dataartisans.flinktraining.exercises.datastream_java.datatypes.TaxiFare;
 import com.dataartisans.flinktraining.exercises.datastream_java.datatypes.TaxiRide;
-import com.dataartisans.flinktraining.exercises.datastream_scala.state.RidesAndFaresExercise;
+import com.dataartisans.flinktraining.solutions.datastream_java.state.RidesAndFaresSolution;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class RidesAndFaresScalaTest extends RidesAndFaresTest {
 	static Testable scalaExercise = () -> RidesAndFaresExercise.main(new String[]{});
 
 	protected List<?> results(TestRideSource rides, TestFareSource fares) throws Exception {
-		Testable scalaSolution = () -> com.dataartisans.flinktraining.solutions.datastream_scala.state.RidesAndFaresSolution.main(new String[]{});
+		Testable scalaSolution = () -> RidesAndFaresSolution.main(new String[]{});
 		List<?> tuples = runApp(rides, fares, new TestSink<>(), scalaExercise, scalaSolution);
 		return javaTuples((ArrayList<scala.Tuple2<TaxiRide, TaxiFare>>) tuples);
 	}
