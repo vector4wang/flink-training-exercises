@@ -22,7 +22,6 @@ import java.net.URL;
  */
 public class HotItems {
 
-    private final static int pid = 4528499;
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -67,8 +66,7 @@ public class HotItems {
         DataStream<UserBehavior> pvData = timedData.filter(new FilterFunction<UserBehavior>() {
             @Override
             public boolean filter(UserBehavior userBehavior) throws Exception {
-                //  && userBehavior.itemId == 4528499
-                return userBehavior.behavior.equals("pv") && userBehavior.itemId == pid;
+                return userBehavior.behavior.equals("pv");
             }
         });
 
@@ -79,7 +77,7 @@ public class HotItems {
          */
         DataStream<ItemViewCount> windowData = pvData.keyBy("itemId")
                 .timeWindow(Time.minutes(60), Time.minutes( 10))
-                .aggregate(new CountAgg(pid), new WindowResultFunction());
+                .aggregate(new CountAgg(), new WindowResultFunction());
 
         DataStream<String> topItems = windowData.keyBy("windowEnd").process(new TopNHotItems(1));
 
