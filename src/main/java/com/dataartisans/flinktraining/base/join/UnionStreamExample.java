@@ -4,7 +4,7 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
- *
+ * 合并两个stream
  * @author wangxc
  * @date: 2019-08-02 07:48
  *
